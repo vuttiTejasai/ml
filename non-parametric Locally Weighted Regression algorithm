@@ -1,0 +1,53 @@
+
+fromnumpy import *
+import operator
+fromos import listdir
+importmatplotlib
+importmatplotlib.pyplot as plt
+import pandas as pd
+importnumpy as np1 
+importnumpy.linalg as np  
+fromscipy.stats import pearsonr
+def kernel(point, xmat, k):
+m, n = np1.shape(xmat)
+weights = np1.mat(np1.eye(m))
+for j in range(m):
+diff = point - xmat[j]  
+weights[j, j] = np1.exp((diff * diff.T).item() / (-2.0 * k**2))
+return weights
+deflocalWeight(point, xmat, ymat, k):
+wei = kernel(point, xmat, k)
+    W = (xmat.T * (wei * xmat)).I * (xmat.T * (wei * ymat.T))
+return W
+deflocalWeightRegression(xmat, ymat, k):
+m, n = np1.shape(xmat)
+ypred = np1.zeros((m, 1))  
+fori in range(m):
+ypred[i] = xmat[i] @ localWeight(xmat[i], xmat, ymat, k)
+returnypred
+data = pd.read_csv('data10.csv') 
+bill = np1.array(data.total_bill) 
+tip = np1.array(data.tip)
+mbill = np1.mat(bill)
+mtip = np1.mat(tip)
+m = np1.shape(mbill)[1]
+one = np1.mat(np1.ones((m)))
+X = np1.hstack((one.T, mbill.T))
+ypred = localWeightRegression(X, mtip, 2)
+bill_values = np1.array(X[:, 1]).flatten()  
+ypred_values = np1.array(ypred).flatten()       
+sortIndices = bill_values.argsort()
+bill_sorted = bill_values[sortIndices]
+ypred_sorted = ypred_values[sortIndices]
+plt.figure(figsize=(8, 6))
+plt.scatter(np1.array(mbill.T).flatten(), np1.array(mtip.T).flatten(),
+label='Data', color='blue')
+plt.plot(bill_sorted, ypred_sorted, label='LWR Fit', color='red')
+plt.xlabel('Total Bill')
+plt.ylabel('Tip')
+plt.title('Locally Weighted Regression')
+plt.legend()
+plt.show()
+
+output:
+ 
