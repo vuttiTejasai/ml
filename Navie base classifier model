@@ -1,0 +1,54 @@
+
+import pandas as pd
+msg = pd.read_csv('document.csv', names=['message', 'label'])
+print("Total Instances of Dataset: ", msg.shape[0])
+msg['labelnum'] = msg.label.map({'pos': 1, 'neg': 0})
+X = msg.message
+y = msg.labelnum
+fromsklearn.model_selection import train_test_split
+Xtrain, Xtest, ytrain, ytest = train_test_split(X, y)
+fromsklearn.feature_extraction.text import CountVectorizer
+count_v = CountVectorizer()
+Xtrain_dm = count_v.fit_transform(Xtrain)
+Xtest_dm = count_v.transform(Xtest)
+df = pd.DataFrame(Xtrain_dm.toarray(), columns=count_v.get_feature_names_out())
+print(df[0:5])
+fromsklearn.naive_bayes import MultinomialNB
+clf = MultinomialNB()
+clf.fit(Xtrain_dm, ytrain)
+pred = clf.predict(Xtest_dm)
+for doc, p in zip(Xtest, pred): 
+p_label = 'pos' if p == 1 else 'neg'
+print(f"{doc} -> {p_label}")
+fromsklearn.metrics import accuracy_score, confusion_matrix, precision_score, recall_score
+print('Accuracy Metrics: \n')
+print('Accuracy: ', accuracy_score(ytest, pred))
+print('Recall: ', recall_score(ytest, pred))
+print('Precision: ', precision_score(ytest, pred))
+print('Confusion Matrix: \n', confusion_matrix(ytest, pred))
+
+
+
+output:
+Total Instances of Dataset:  18
+am  amazing  an  and  awesome  best  ...  view  we  went  what  will  work
+0   0        0   1    0        1     0  ...     1   0     0     1     0     0
+1   0        0   0    0        0     0  ...     0   0     0     0     0     0
+2   0        0   0    0        0     0  ...     0   0     0     0     0     0
+3   1        0   0    1        0     0  ...     0   0     0     0     0     0
+4   0        0   0    0        0     0  ...     0   0     0     0     0     0
+
+[5 rows x 42 columns]
+That is a bad locality to stay ->pos
+I do not like this restaurant ->neg
+I love this sandwich ->pos
+I feel very good about these beers ->pos
+I can't deal with this ->pos
+Accuracy Metrics: 
+
+Accuracy:  0.6
+Recall:  1.0
+Precision:  0.5
+Confusion Matrix: 
+ [[1 2]
+ [0 2]]
