@@ -1,0 +1,28 @@
+
+
+from itertools import permutations
+def tsp(cost):
+    numNodes = len(cost)
+    nodes = list(range(1, numNodes))
+    minCost = float('inf')
+    for perm in permutations(nodes):
+        currCost = 0
+        currNode = 0
+        for node in perm:
+            currCost += cost[currNode][node]
+            currNode = node
+        currCost += cost[currNode][0]
+        minCost = min(minCost, currCost)
+    return minCost 
+if __name__ == "__main__":
+    cost = [
+        [0, 10, 15, 20],
+        [10, 0, 35, 25],
+        [15, 35, 0, 30],
+        [20, 25, 30, 0]
+    ]
+    res = tsp(cost)
+    print(res)
+
+output:
+80
