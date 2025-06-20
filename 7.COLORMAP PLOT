@@ -1,0 +1,26 @@
+
+import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib.colors import ListedColormap
+x = np.random.rand(50)
+y = np.random.rand(50)
+colors = np.random.rand(50)
+cmap = ListedColormap(['red', 'green', 'blue'])
+plt.scatter(x, y, c=colors, cmap=cmap)
+plt.colorbar() 
+plt.show()
+
+8.CUSTOM COLORMAP PLOT
+
+import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib.colors import ListedColormap
+
+colors = ["blue", "green", "yellow"]
+cmap = ListedColormap(colors)
+
+data = np.random.randn(10, 10)
+
+plt.imshow(data, cmap=cmap)
+plt.colorbar()
+plt.show()
